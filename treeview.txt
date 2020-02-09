@@ -1,0 +1,133 @@
+declare 
+l_current_level numeric;
+l_parent_counter numeric;
+l_row_counter numeric;
+l_count numeric;
+
+  li_arr JSON_ARRAY_T;
+  jo JSON_OBJECT_T;
+  joParent JSON_OBJECT_T;
+TYPE advisor_tree IS RECORD
+(
+ParentName varchar2(200), 
+ChildName varchar2(200),
+ParentId numeric,
+Vgbid numeric,
+Status varchar2 (50),
+LevelD numeric,
+Aga numeric,
+AgaJson clob
+
+);
+TYPE advisor_tree_json IS RECORD
+(
+ 
+Vgbid numeric,
+vgbid_Aga numeric,
+AgaJson JSON_OBJECT_T
+
+);
+
+ TYPE l_delete is VARRAY(4000) OF numeric;
+ l_delete_table  l_delete;
+
+type advisor_tree_table is table of advisor_tree;
+l_populate_table advisor_tree_table ;
+
+type advisor_tree_json_table is table of advisor_tree_json;
+l_advisor_tree_json advisor_tree_json_table;
+
+begin
+l_advisor_tree_json:=advisor_tree_json_table();
+l_delete_table :=l_delete();
+  Select a.advisor_name parent,c.advisor_name child ,c.parent_id, c.vgbid ,a.status,leveld, c.vgbid_aga  ,
+    '{"name":"'||c.advisor_name ||'", "title":"'||a.status ||'","children":[]}'
+    
+  
+  
+  bulk collect into l_populate_table 
+From 
+gw_adv_profiles a,
+gw_adv_profiles b,
+(
+select   advisor_name ,vgbid,  vgbid_aga
+, CONNECT_BY_ROOT vgbid AS parent_id,
+  to_number(level) LevelD 
+
+from gw_adv_profiles_controlled 
+start with vgbid is not null
+connect by prior vgbid=vgbid_aga
+order by   leveld desc
+) c
+where 
+a.vgbid= c.vgbid_aga
+and
+b.vgbid= c.vgbid
+and  c.parent_id=:P59_VGBID ;
+    
+   for l_parent_counter in l_populate_table.FIRST .. l_populate_table.LAST
+   loop
+     --dbms_output.put_line( l_populate_table(l_parent_counter).AgaJson);
+   jo:= JSON_OBJECT_T.parse(l_populate_table(l_parent_counter).AgaJson) ;
+   --insert into l_advisor_tree_json (Vgbid,Vgbid_aga,AgaJson) values (l_populate_table(l_parent_counter).vgbid,l_populate_table(l_parent_counter).aga,jo);
+    l_advisor_tree_json.EXTEND(1);
+            l_advisor_tree_json(l_advisor_tree_json.count).vgbid:=l_populate_table(l_parent_counter).vgbid;
+            l_advisor_tree_json(l_advisor_tree_json.count).Vgbid_aga:=l_populate_table(l_parent_counter).aga;
+              l_advisor_tree_json(l_advisor_tree_json.count).AgaJson:=jo;
+ 
+   
+   end loop;
+   
+    l_count := l_populate_table.count;
+ for l_parent_counter in l_advisor_tree_json.FIRST .. l_advisor_tree_json.LAST
+       
+     
+                loop
+                
+                  if l_advisor_tree_json.exists(l_parent_counter) then
+                  for l_row_counter in l_advisor_tree_json.FIRST .. l_advisor_tree_json.LAST
+                            
+                            loop                 
+                            --dbms_output.put_line( l_advisor_tree_json(l_parent_counter).AgaJson.to_string);
+                                if l_advisor_tree_json(l_parent_counter).vgbid_aga=l_advisor_tree_json(l_row_counter).vgbid then
+                                --dbms_output.put_line( l_advisor_tree_json(l_parent_counter).AgaJson.to_string);
+                                    jo:= JSON_OBJECT_T.parse(l_advisor_tree_json(l_parent_counter).AgaJson.to_string);
+                                    joParent :=JSON_OBJECT_T.parse(l_advisor_tree_json(l_row_counter).AgaJson.to_string);
+                                    li_arr := jo.get_Array('children');
+                                    li_arr.append(joParent);
+                                    l_advisor_tree_json(l_row_counter).AgaJson.put('children',JSON_ARRAY_T(li_arr.to_string));
+                                end if;
+                            
+                            end loop;
+    
+                    end if;
+            end loop;
+    
+Htp.P(
+'
+   <div id="chart-container"></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.9/js/jquery.orgchart.js"></script>
+   
+    <script type="text/javascript">
+ $(function() {
+
+    var datasource = '||replace(l_advisor_tree_json(l_count).AgaJson.to_string,'"','''')||';
+    
+    
+   
+    $(''#chart-container'').OrgChart({
+      ''data'' : datasource,
+      ''nodeContent'': ''title''
+    });
+    });
+    </script>
+'
+);
+   
+    
+     --dbms_output.put_line( replace(l_advisor_tree_json(l_count).AgaJson.to_string,'"',''''));
+
+
+   
+
+end;

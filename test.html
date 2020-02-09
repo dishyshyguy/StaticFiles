@@ -17,7 +17,7 @@
   <script type="text/javascript">
     $(function() {
 
-    var datascource = {'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Alain Madueno','title':'ACTIVE','children':[]},{'name':'Melvin Sotto','title':'ACTIVE','children':[{'name':'Melvin Sotto','title':'ACTIVE','children':[{'name':'Melvin Sotto','title':'ACTIVE','children':[]}]}]},{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Rhodora Panlaque','title':'ACTIVE','children':[{'name':'Rhodora Panlaque','title':'ACTIVE','children':[]}]},{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[]}]}]}]}]}]}]}]}]};
+    var datascource = window.localStorage.getItem('greatwaytree');;
 
    $('#chart-container').orgchart({
       'data' : datascource,

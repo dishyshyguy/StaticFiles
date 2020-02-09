@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Organization Chart Plugin</title>
+  <link rel="icon" href="img/logo.png">
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.9/css/jquery.orgchart.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.9/css/jquery.orgchart.min.css">
+</head>
+<body>
+  <div id="chart-container"></div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.9/js/jquery.orgchart.js"></script>
+ 
+  <script type="text/javascript">
+    $(function() {
+
+    var datascource = {'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Alain Madueno','title':'ACTIVE','children':[]},{'name':'Melvin Sotto','title':'ACTIVE','children':[{'name':'Melvin Sotto','title':'ACTIVE','children':[{'name':'Melvin Sotto','title':'ACTIVE','children':[]}]}]},{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Rhodora Panlaque','title':'ACTIVE','children':[{'name':'Rhodora Panlaque','title':'ACTIVE','children':[]}]},{'name':'Sherwin Lopez','title':'ACTIVE','children':[{'name':'Sherwin Lopez','title':'ACTIVE','children':[]}]}]}]}]}]}]}]}]};
+
+   $('#chart-container').orgchart({
+      'data' : datascource,
+      'nodeContent': 'title',
+      'direction': 'b2t'
+    });
+
+  });
+  </script>
+  </body>
+</html>

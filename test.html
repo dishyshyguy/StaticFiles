@@ -15,17 +15,28 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.9/js/jquery.orgchart.js"></script>
  
   <script type="text/javascript">
-    $(function() {
+   
 
-    var datascource = window.localStorage.getItem('greatwaytree');;
-
+    var datascource ;
+    
+      window.addEventListener('message', function(event) {
+      var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
+      if (origin !== /*the container's domain url*/)
+        return;
+      if (typeof event.data == 'object' && event.data.call=='sendValue') {
+        // Do something with event.data.value;
+        datascource = event.data.value;
+      }
+      }, false);
+      
+      
    $('#chart-container').orgchart({
       'data' : datascource,
       'nodeContent': 'title',
       'direction': 'b2t'
     });
 
-  });
+ 
   </script>
   </body>
 </html>

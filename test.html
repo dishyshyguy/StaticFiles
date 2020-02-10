@@ -17,24 +17,23 @@
   <script type="text/javascript">
    
 
-    var datascource ;
+   
     
-      window.addEventListener('message', function(event) {
-      var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
-      if (!origin.includes ('https://greatwayfinancial.info/'))
-        return;
-      if (typeof event.data == 'object' && event.data.call=='sendValue') {
-        // Do something with event.data.value;
-        datascource = event.data.value;
-      }
-      }, false);
+    // iframe document code
+        function receive(event) {
+              
+          $('#chart-container').orgchart({
+            'data' : event.data,
+            'nodeContent': 'title',
+            'direction': 'b2t'
+          });
+        }
+        window.addEventListener('message', receive);
+    
+     
       
       
-   $('#chart-container').orgchart({
-      'data' : datascource,
-      'nodeContent': 'title',
-      'direction': 'b2t'
-    });
+   
 
  
   </script>

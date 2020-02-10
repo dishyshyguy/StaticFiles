@@ -17,7 +17,7 @@
   <script type="text/javascript">
    
 
-   
+     window.addEventListener('message', receive);
     
     // iframe document code
         function receive(event) {
@@ -27,8 +27,8 @@
             'nodeContent': 'title',
             'direction': 'b2t'
           });
-        }
-        window.addEventListener('message', receive);
+        };
+      
     
      
       

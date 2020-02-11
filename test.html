@@ -22,20 +22,20 @@
     var qArray = url.split('&'); //get key-value pairs
    var pArr = qArray[0].split('='); //split key and value
         if (pArr[0] == paramName) 
-        {
-    $('#chart-container').orgchart({
-            'data' : pArr[1],
-            'nodeContent': 'title',
-            'direction': 'b2t'
-          });
-        };
+        return pArr[1];
+   
 }
      
     
-    
+    var datasource = getParamValue('param1');
       
       
-   
+    $('#chart-container').orgchart({
+            'data' : datasource,
+            'nodeContent': 'title',
+            'direction': 'b2t'
+          });
+       
 
  
   </script>

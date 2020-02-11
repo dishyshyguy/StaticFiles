@@ -15,19 +15,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.9/js/jquery.orgchart.js"></script>
  
   <script type="text/javascript">
-   
-  function getParamValue(paramName)
-{
-    var url = window.location.search.substring(1); //get rid of "?" in querystring
-    var qArray = url.split('&'); //get key-value pairs
-   var pArr = qArray[0].split('='); //split key and value
-        if (pArr[0] == paramName) 
-        return pArr[1];
-   
-}
-     
-    
-    var datasource = getParamValue('param1');
+   var datasource = location.href.split('=')[1].split('&');
+
       
       
     $('#chart-container').orgchart({

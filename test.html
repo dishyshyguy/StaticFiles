@@ -21,9 +21,9 @@
     
     // iframe document code
         function receive(event) {
-              
+          var datasource=    event.data;
           $('#chart-container').orgchart({
-            'data' : event.data,
+            'data' : datasource,
             'nodeContent': 'title',
             'direction': 'b2t'
           });
